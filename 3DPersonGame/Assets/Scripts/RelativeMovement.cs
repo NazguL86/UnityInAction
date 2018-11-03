@@ -9,6 +9,7 @@ public class RelativeMovement : MonoBehaviour {
 
     public float rotSpeed = 15.0f;
     public float moveSpeed = 6.0f;
+    public float pushForce = 3.0f;
 
     public float jumpSpeed = 15.0f;
     public float gravity = -9.8f;
@@ -86,5 +87,10 @@ public class RelativeMovement : MonoBehaviour {
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         _contact = hit;
+
+        Rigidbody body = hit.collider.attachedRigidbody;
+        if (body != null && !body.isKinematic) {
+            body.velocity = hit.moveDirection * pushForce;
+        }
     }
 }
