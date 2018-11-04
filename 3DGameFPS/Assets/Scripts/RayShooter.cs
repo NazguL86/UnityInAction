@@ -4,6 +4,10 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 
 public class RayShooter : MonoBehaviour {
+    [SerializeField] private AudioSource soundSource;
+    [SerializeField] private AudioClip hitWallSound;
+    [SerializeField] private AudioClip hitEnemySound;
+
     private Camera _camera;
 
 	// Use this for initialization
@@ -27,14 +31,14 @@ public class RayShooter : MonoBehaviour {
             if (Physics.Raycast(ray, out hit)) {
                 GameObject hitObject = hit.transform.gameObject;
                 ReactiveTarget target = hitObject.GetComponent<ReactiveTarget>();
-                if (target != null)
-                {
+                if (target != null) {
                     target.ReactToHit();
                     Messenger.Broadcast(GameEvent.ENEMY_HIT);
+                    soundSource.PlayOneShot(hitEnemySound);
                 }
-                else
-                {
+                else {
                     StartCoroutine(SphereIndicator(hit.point));
+                    soundSource.PlayOneShot(hitWallSound);
                 }
             }
         }
